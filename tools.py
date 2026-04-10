@@ -12,7 +12,7 @@ def get_weather(city:str)->str:
         
         current=data["current_condition"][0]
         
-        return current
+        return f"{city}天气：{current['weatherDesc'][0]['value']}，{current['temp_C']}°C"
     except Exception as e:
         return f"未知错误:{e}"
     
@@ -23,16 +23,21 @@ def search_place(city:str,weather:str)->str:
     
     query=f"在{city}在{weather}天气下适合去的景点"
     try:
-        response=tavily.search(query=query,seach_depth="basic",include_answer=True)
+        response=tavily.search(query=query,search_depth="basic",include_answer=True)
         return response["answer"]
     except Exception as e:
         return f"未知错误:{e}"
+
+
 @tool(description="讲笑话")
 def say_jokes()->str:
     url="https://v2.jokeapi.dev/joke/Any?type=single"
     response=requests.get(url=url)
-    joke=response.json()["joke"]
-    return joke
+    try:
+        joke=response.json()["joke"]
+        return joke
+    except Exception as e:
+        return f"未知错误:{e}"
     
 # if __name__=="__main__":
 #     res=say_jokes()
